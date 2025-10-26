@@ -28,10 +28,7 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: front-{{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.frontend.image }}:{{ .Values.frontend.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
               containerPort: {{ .Values.frontend.service.port }}
@@ -47,8 +44,6 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
         - name: proxy-{{ .Chart.Name }}
-          securityContext:
-                    {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.proxy.image }}:{{ .Values.proxy.tag | default .Chart.AppVersion }}"
           ports:
             - name: http
@@ -64,15 +59,3 @@ spec:
               port: http
           resources:
                     {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
