@@ -2,7 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-front
-  labels: {{ "front" | toString }}
+  labels:
+    {{- include "fort.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -12,7 +13,7 @@ spec:
   template:
     metadata:
       labels:
-        app: front-{{ include "fort.name" . }}
+        app: front
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       containers:
@@ -38,13 +39,13 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-proxy
-  labels: {{ "proxy" | toString }}
-
+  labels:
+    proxy-{{ include "fort.name" . }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: proxy-{{ include "fort.name" . }}
+      app: proxy
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
