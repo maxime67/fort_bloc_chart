@@ -1,32 +1,23 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-front
-  labels:
-    {{- include "fort.labels" . | nindent 4 }}
+  name: {{ .Release.Name }}-frontend
 spec:
-  type: ClusterIP
-  ports:
-    - port: {{ .Values.frontend.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
   selector:
-    app: front
+    app: frontend
+  ports:
+    - port: {{ .Values.frontend.port }}
+      targetPort: {{ .Values.frontend.port }}
 
 ---
+
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ .Release.Name }}-proxy
-  labels:
-    {{- include "fort.labels" . | nindent 4 }}
 spec:
-  type: ClusterIP
-  ports:
-    - port: {{ .Values.proxy.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
   selector:
     app: proxy
+  ports:
+    - port: {{ .Values.proxy.port }}
+      targetPort: {{ .Values.proxy.port }}

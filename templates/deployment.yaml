@@ -1,72 +1,61 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-front
+  name: {{ .Release.Name }}-frontend
   labels:
-    {{- include "fort.labels" . | nindent 4 }}
+    app: frontend
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.frontend.replicas }}
   selector:
     matchLabels:
-      app: front-{{ include "fort.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+      app: frontend
   template:
     metadata:
       labels:
-        app: front
-        app.kubernetes.io/instance: {{ .Release.Name }}
+        app: frontend
     spec:
       containers:
-        - name: front-{{ .Chart.Name }}
-          image: "{{ .Values.frontend.image }}:{{ .Values.frontend.tag | default .Chart.AppVersion }}"
+        - name: frontend
+          image: "{{ .Values.frontend.image }}:{{ .Values.frontend.tag }}"
           ports:
-            - name: http
-              containerPort: {{ .Values.frontend.service.port }}
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
+            - containerPort: {{ .Values.frontend.port }}
+          resources:
+          {{- toYaml .Values.frontend.resources | nindent 10 }}
           readinessProbe:
             httpGet:
               path: /
-              port: http
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+              port: {{ .Values.frontend.port }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
 
 ---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-proxy
   labels:
-    {{ include "fort.name" . }}
+    app: proxy
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.proxy.replicas }}
   selector:
     matchLabels:
       app: proxy
-      app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: proxy-{{ include "fort.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
+        app: proxy
     spec:
       containers:
-        - name: proxy-{{ .Chart.Name }}
+        - name: proxy
           image: "{{ .Values.proxy.image }}:{{ .Values.proxy.tag }}"
           ports:
-            - name: http
-              containerPort: {{ .Values.proxy.service.port }}
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /api/meteo
-              port: http
+            - containerPort: {{ .Values.proxy.port }}
+          resources:
+          {{- toYaml .Values.proxy.resources | nindent 10 }}
           readinessProbe:
             httpGet:
               path: /api/meteo
-              port: http
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+              port: {{ .Values.proxy.port }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
