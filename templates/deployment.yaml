@@ -45,7 +45,7 @@ spec:
   template:
     metadata:
       labels:
-        app: proxy-{{- include "fort.selectorLabels" . | nindent 8 }}
+        app: proxy_{{- include "fort.selectorLabels" . | nindent 8 }}
     spec:
       containers:
         - name: proxy-{{ .Chart.Name }}
