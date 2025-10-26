@@ -4,7 +4,12 @@ kind: Ingress
 metadata:
   name: {{ .Release.Name }}-ingress
   annotations:
-    {{- toYaml .Values.ingress.annotations | nindent 4 }}
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls.certresolver: le
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    {{- with .Values.ingress.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   rules:
     - host: {{ .Values.ingress.host }}
@@ -24,4 +29,7 @@ spec:
                 name: {{ .Release.Name }}-proxy
                 port:
                   number: {{ .Values.proxy.port }}
+  tls:
+    - hosts:
+        - {{ .Values.ingress.host }}
 {{- end }}
