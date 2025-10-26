@@ -40,7 +40,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-proxy
   labels:
-    proxy-{{ include "fort.name" . }}
+    {{ include "fort.name" . }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
