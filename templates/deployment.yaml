@@ -7,14 +7,14 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: front_{{ include "fort.selectorLabels" . | nindent 6 }}
+      app: front{{ include "fort.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: front_{{ include "fort.selectorLabels" . | nindent 8 }}
+        app: front{{ include "fort.selectorLabels" . | nindent 8 }}
     spec:
       containers:
-        - name: front_{{ .Chart.Name }}
+        - name: front{{ .Chart.Name }}
           image: "{{ .Values.frontend.image }}:{{ .Values.frontend.tag | default .Chart.AppVersion }}"
           ports:
             - name: http
@@ -35,20 +35,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: proxy_{{ include "fort.fullname" . }}
+  name: proxy{{ include "fort.fullname" . }}
   labels:
-    app: proxy_{{- include "fort.labels" . | nindent 4 }}
+    app: proxy{{- include "fort.labels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      app: proxy_{{- include "fort.selectorLabels" . | nindent 6 }}
+      app: proxy{{- include "fort.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: proxy_{{- include "fort.selectorLabels" . | nindent 8 }}
+        app: proxy{{- include "fort.selectorLabels" . | nindent 8 }}
     spec:
       containers:
-        - name: proxy-{{ .Chart.Name }}
+        - name: proxy{{ .Chart.Name }}
           image: "{{ .Values.proxy.image }}:{{ .Values.proxy.tag }}"
           ports:
             - name: http
