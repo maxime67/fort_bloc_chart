@@ -12,7 +12,7 @@ spec:
       protocol: TCP
       name: http
   selector:
-    front{{- include "fort.selectorLabels" . | nindent 4 }}
+    app: front-{{ include "fort.selectorLabels" . }}
 
 ---
 apiVersion: v1
@@ -29,4 +29,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    proxy{{- include "fort.selectorLabels" . | nindent 4 }}
+    app: proxy-{{ include "fort.selectorLabels" . }}
