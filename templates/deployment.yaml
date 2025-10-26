@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-front
   labels:
-    {{- include "fort.labels" . | nindent 4 }}
+    front-{{ include "fort.name" . }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -40,7 +40,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-proxy
   labels:
-    {{- include "fort.labels" . | nindent 4 }}
+    proxy-{{ include "fort.name" . }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:

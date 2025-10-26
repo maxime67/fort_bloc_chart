@@ -19,11 +19,6 @@ frontend:
   service:
     port: 80
 
-image:
-  repository: nginx
-  pullPolicy: IfNotPresent
-  tag: ""
-
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
