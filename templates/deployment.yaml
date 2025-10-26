@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "fort.fullname" . }}-front
+  name: {{ .Release.Name }}-front
   labels:
     {{- include "fort.labels" . | nindent 4 }}
 spec:
@@ -38,7 +38,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "fort.fullname" . }}-proxy
+  name: {{ .Release.Name }}-proxy
   labels:
     {{- include "fort.labels" . | nindent 4 }}
 spec:
