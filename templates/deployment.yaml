@@ -2,8 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-front
-  labels:
-    front-{{ include "fort.name" . }}
+  labels: {{ "front" | toString }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -39,8 +38,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-proxy
-  labels:
-    proxy-{{ include "fort.name" . }}
+  labels: {{ "proxy" | toString }}
+
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:

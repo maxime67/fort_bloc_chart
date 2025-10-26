@@ -12,7 +12,7 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app: front-{{ include "fort.name" . }}
+    app: front
     app.kubernetes.io/instance: {{ .Release.Name }}
 
 ---
@@ -30,5 +30,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app: proxy-{{ include "fort.name" . }}
+    app: proxy
     app.kubernetes.io/instance: {{ .Release.Name }}
