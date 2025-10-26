@@ -5,27 +5,14 @@ metadata:
   labels:
     {{- include "fort.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
-      {{- include "fort.selectorLabels" . | nindent 6 }}
+      front-{{- include "fort.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       labels:
-        {{- include "fort.selectorLabels" . | nindent 8 }}
+        front-{{- include "fort.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: front-{{ .Chart.Name }}
           image: "{{ .Values.frontend.image }}:{{ .Values.frontend.tag | default .Chart.AppVersion }}"
@@ -43,8 +30,26 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proxy-{{ include "fort.fullname" . }}
+  labels:
+    proxy-{{- include "fort.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      proxy-{{- include "fort.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        proxy-{{- include "fort.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
         - name: proxy-{{ .Chart.Name }}
-          image: "{{ .Values.proxy.image }}:{{ .Values.proxy.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.proxy.image }}:{{ .Values.proxy.tag }}"
           ports:
             - name: http
               containerPort: {{ .Values.proxy.service.port }}
