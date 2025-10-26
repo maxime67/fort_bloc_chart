@@ -24,7 +24,6 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "fort.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -47,11 +46,10 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-        - name: proxt-{{ .Chart.Name }}
+        - name: proxy-{{ .Chart.Name }}
           securityContext:
                     {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.proxy.image }}:{{ .Values.proxy.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
               containerPort: {{ .Values.proxy.service.port }}
