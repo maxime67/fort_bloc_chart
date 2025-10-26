@@ -7,11 +7,11 @@ metadata:
 spec:
   selector:
     matchLabels:
-      front-{{- include "fort.selectorLabels" . | nindent 6 }}
+      app: front-{{ include "fort.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        front-{{- include "fort.selectorLabels" . | nindent 8 }}
+        app: front-{{ include "fort.selectorLabels" . | nindent 8 }}
     spec:
       containers:
         - name: front-{{ .Chart.Name }}
@@ -37,15 +37,15 @@ kind: Deployment
 metadata:
   name: proxy-{{ include "fort.fullname" . }}
   labels:
-    proxy-{{- include "fort.labels" . | nindent 4 }}
+    app: proxy-{{- include "fort.labels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      proxy-{{- include "fort.selectorLabels" . | nindent 6 }}
+      app: proxy-{{- include "fort.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        proxy-{{- include "fort.selectorLabels" . | nindent 8 }}
+        app: proxy-{{- include "fort.selectorLabels" . | nindent 8 }}
     spec:
       containers:
         - name: proxy-{{ .Chart.Name }}
@@ -63,4 +63,4 @@ spec:
               path: /
               port: http
           resources:
-                    {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.resources | nindent 12 }}
